@@ -3,10 +3,10 @@ from typing import List
 
 class Logimage:
 
-    def __init__(self, leftLists: List[List[int]] = None, topLists: List[List[int]] = None):
-        if leftLists is None:
-            leftLists = []
-        if topLists is None:
-            topLists = []
-        self.height = len(leftLists)
-        self.width = len(topLists)
+    def __init__(self, leftConstraints: List[List[int]] = None, topConstraints: List[List[int]] = None):
+        if leftConstraints is None:
+            leftConstraints = []
+        if topConstraints is None:
+            topConstraints = []
+        self.height = len(leftConstraints)
+        self.width = len(topConstraints)
