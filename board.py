@@ -77,3 +77,6 @@ class Board:
             else:
                 raise ValueError("A board should only contain the values -1, 0 or 1. But we found the value "
                                  + str(board_extract[0]))
+    # TODO
+    # complete function body using subfunction
+    # write a test file and perform some tests
