@@ -4,9 +4,10 @@ import numpy as np
 
 class Board:
     def __init__(self, height: int = None, width: int = None, data: np.ndarray = None):
-        if height is None or data is None:
+        if height is None or width is None:
             if data is None:
-                raise ValueError("Building a board requires providing either its width andits height, or its initial data.")
+                raise ValueError(
+                    "Building a board requires providing either its width and its height, or its initial data.")
             else:
                 (height, width) = data.shape
         elif data is None:
@@ -23,9 +24,9 @@ class Board:
             line_to_print = "| "
             for column in range(self.width):
                 if self.data[row][column] == 1:
-                    to_print += "X"
+                    line_to_print += "X "
                 else:
-                    to_print += " "
+                    line_to_print += "  "
             line_to_print += "|"
 
             total_to_print += "\n" + line_to_print
