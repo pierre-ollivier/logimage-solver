@@ -52,7 +52,21 @@ class Logimage:
                 "Tried (and failed) to solve a logimage with no solution.")
 
     def surely_fill_empty_squares(self, board: Board) -> None:
-        pass
+        for i, left_constraint in enumerate(self.left_constraints):
+            constraint = left_constraint[0]
+            if board.data[i][0] == 1 or constraint == self.width:
+                for j in range(constraint):
+                    board.set_square(i, j, 1)
+                if (constraint < self.width):
+                    board.set_square(i, constraint, 0)
+
+        for j, top_constraint in enumerate(self.top_constraints):
+            constraint = top_constraint[0]
+            if board.data[0][j] == 1 or constraint == self.height:
+                for i in range(constraint):
+                    board.set_square(i, j, 1)
+                if (constraint < self.height):
+                    board.set_square(constraint, j, 0)
 
     def is_solution(self, board: Board) -> bool:
         """

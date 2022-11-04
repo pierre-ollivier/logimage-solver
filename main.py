@@ -18,5 +18,17 @@ logimage_to_solve = logimage.Logimage(
     ]
 )
 
-solution = logimage_to_solve.solve()
+bigger_logimage_to_solve = logimage.Logimage(
+    left_constraints=[
+        [5],
+        [6],
+        [3, 1],
+        [1, 1, 2]
+    ],
+    top_constraints=[
+        [2], [4], [3], [2, 1], [3], [2, 1], [1]
+    ]
+)
+
+solution = bigger_logimage_to_solve.solve()
 solution.draw()
