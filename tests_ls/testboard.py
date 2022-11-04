@@ -1,6 +1,14 @@
 from logimage import Logimage
 from board import Board
+from utils import check_dim
 import numpy as np
+
+
+def test8checkdim():
+    assert check_dim(constraints=[1, 2], board_extract=[
+        1, 0, 0, 1, 1, 0, 0])
+    assert check_dim(constraints=[1, 2], board_extract=[
+        0, 1, 0, 0, 1, 1, 0, 0])
 
 
 def test0():
@@ -17,11 +25,8 @@ def test0():
         [1], [0], [1], [0], [1], [1], [0]
     ]))
 
-    board.draw()
-    board2.draw()
-
-    assert board2.is_solution(log)
-    assert not(board.is_solution(log))
+    assert log.is_solution(board2)
+    assert not(log.is_solution(board))
 
 
 def test1():
@@ -39,9 +44,7 @@ def test1():
                         [0, 1, 1, 1, 1, 0]
                         ]))
 
-    board.draw()
-
-    assert board.is_solution(log)
+    assert log.is_solution(board)
 
 
 def run():
