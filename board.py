@@ -1,19 +1,21 @@
 from typing import List
-import numpy as np
 from logimage import Logimage
+import numpy as np
 
 
 class Board:
-    def __init__(self, height: int = None, width: int = None, data: np.ndarray = None):
+    def __init__(self, height: int = None, width: int = None, data: List[List[int]] = None):
         if height is None or width is None:
             if data is None:
                 raise ValueError(
                     "Building a board requires providing either its width and its height, or its initial data.")
             else:
-                (height, width) = data.shape
+                height = len(data)
+                width = len(data[0])
         elif data is None:
             data = np.ones(shape=(height, width))
             data *= -1
+            data = data.tolist()
 
         self.height = height
         self.width = width
@@ -35,14 +37,14 @@ class Board:
 
         print(total_to_print)
 
-    def is_solution(self, log: Logimage -> bool):
+    def is_solution(self, log: Logimage) -> bool:
         """
         Checks whether the `Board` instance is a solution of the logimage `log`.
         """
         if self.height != log.height or self.width != log.width:
             return False
 
-        def check_dim(constraints: List[int], board_extract: List[int]):
+        def check_dim(constraints: List[int], board_extract: List[int]) -> bool:
             """
             Checks whether a line or column extracted from a `Board` respects the constraints.
             Args:
@@ -54,6 +56,11 @@ class Board:
             if constraints == []:
                 # with no constraints, all the squares should be blank
                 return board_extract == len(board_extract) * [0]
+            if board_extract == []:
+                print(board_extract)
+                print(constraints)
+                raise ValueError("Unexpected empty board extract.")
+                return False
             elif board_extract[0] == 0:
                 # recursive call
                 return check_dim(constraints, board_extract[1:])
@@ -77,6 +84,16 @@ class Board:
             else:
                 raise ValueError("A board should only contain the values -1, 0 or 1. But we found the value "
                                  + str(board_extract[0]))
-    # TODO
-    # complete function body using subfunction
-    # write a test file and perform some tests
+
+        assert check_dim(constraints=[1, 2], board_extract=[
+                         1, 0, 0, 1, 1, 0, 0])
+        assert check_dim(constraints=[1, 2], board_extract=[
+                         0, 1, 0, 0, 1, 1, 0, 0])
+
+        for i, constraint in enumerate(log.left_constraints):
+            if not(check_dim(constraint, self.data[i])):
+                return False
+        for i, constraint in enumerate(log.top_constraints):
+            if not(check_dim(constraint, [self.data[k][i] for k in range(len(self.data))])):
+                return False
+        return True
