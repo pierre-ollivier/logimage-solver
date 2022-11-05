@@ -2,6 +2,7 @@ from board import Board
 from typing import List, Tuple
 from utils import check_dim, get_following_values
 from copy import deepcopy
+from exceptions import *
 
 
 class Logimage:
@@ -32,20 +33,23 @@ class Logimage:
             # We first try to fill the square
             board_with_fill_1 = deepcopy(board)
             board_with_fill_1.set_square(h, w, FIRST_VALUE)
-            self.surely_fill_empty_squares(board_with_fill_1)
-            is_f, sol = self.is_fillable(board_with_fill_1)
-            if is_f:
-                return (True, sol)
-            else:
-                # So now we try to put a blank square
-                board_with_fill_0 = deepcopy(board)
-                board_with_fill_0.set_square(h, w, SECOND_VALUE)
-                self.surely_fill_empty_squares(board_with_fill_0)
-                is_f, sol = self.is_fillable(board_with_fill_0)
+            try:
+                self.surely_fill_empty_squares(board_with_fill_1)
+                is_f, sol = self.is_fillable(board_with_fill_1)
                 if is_f:
-                    return True, sol
+                    return (True, sol)
                 else:
-                    return (False, None)
+                    # So now we try to put a blank square
+                    board_with_fill_0 = deepcopy(board)
+                    board_with_fill_0.set_square(h, w, SECOND_VALUE)
+                    self.surely_fill_empty_squares(board_with_fill_0)
+                    is_f, sol = self.is_fillable(board_with_fill_0)
+                    if is_f:
+                        return True, sol
+                    else:
+                        return (False, None)
+            except NoSolutionError:
+                return (False, None)
 
     def solve(self) -> Board:
         empty_board = Board(height=self.height, width=self.width)

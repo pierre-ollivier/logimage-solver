@@ -1,6 +1,5 @@
 from tests_ls.testboard import run as runTestboard
 from tests_ls.testutils import run as runTestutils
-import logimage
 from timetest import *
 
 runTestutils()
