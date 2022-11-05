@@ -75,7 +75,7 @@ class Logimage:
             sum_constraints = sum(left_constraint)
             for j in range(self.width):
                 if sum_constraints <= 0:
-                    board.data[i][j] = 0
+                    board.set_square(i, j, 0)
                 if board.data[i][j] == 1:
                     sum_constraints -= 1
 
@@ -84,9 +84,31 @@ class Logimage:
             sum_constraints = sum(top_constraint)
             for i in range(self.height):
                 if sum_constraints <= 0:
-                    board.data[i][j] = 0
+                    board.set_square(i, j, 0)
                 if board.data[i][j] == 1:
                     sum_constraints -= 1
+
+        # When the maximum count of empty squares is reached in a row, fill the next square with 1
+        for i, left_constraint in enumerate(self.left_constraints):
+            sum_constraints = sum(left_constraint)
+            min_space_taken = sum_constraints + len(left_constraint) - 1
+            for j in range(self.width):
+                if board.data[i][j] == 1 or board.data[i][j] == -1:
+                    return  # nothing can be concluded
+                if self.width - j <= min_space_taken:
+                    board.set_square(i, j, 1)
+                    self.surely_fill_empty_squares(board)  # recursive call
+
+        # When the maximum count of empty squares is reached in a column, fill the next square with 1
+        for j, top_constraint in enumerate(self.top_constraints):
+            sum_constraints = sum(top_constraint)
+            min_space_taken = sum_constraints + len(top_constraint) - 1
+            for i in range(self.height):
+                if board.data[i][j] == 1 or board.data[i][j] == -1:
+                    return  # nothing can be concluded
+                if self.height - i <= min_space_taken:
+                    board.set_square(i, j, 1)
+                    self.surely_fill_empty_squares(board)  # recursive call
 
     def is_solution(self, board: Board) -> bool:
         """
