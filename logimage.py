@@ -70,6 +70,24 @@ class Logimage:
                 if constraint < self.height:
                     board.set_square(constraint, j, 0)
 
+        # When the maximum count of filled squares is reached in a row, fill the next squares with 0
+        for i, left_constraint in enumerate(self.left_constraints):
+            sum_constraints = sum(left_constraint)
+            for j in range(self.width):
+                if sum_constraints <= 0:
+                    board.data[i][j] = 0
+                if board.data[i][j] == 1:
+                    sum_constraints -= 1
+
+        # When the maximum count of filled squares is reached in a column, fill the next squares with 0
+        for j, top_constraint in enumerate(self.top_constraints):
+            sum_constraints = sum(top_constraint)
+            for i in range(self.height):
+                if sum_constraints <= 0:
+                    board.data[i][j] = 0
+                if board.data[i][j] == 1:
+                    sum_constraints -= 1
+
     def is_solution(self, board: Board) -> bool:
         """
         Checks whether the `Board` instance is a solution of the logimage `log`.
