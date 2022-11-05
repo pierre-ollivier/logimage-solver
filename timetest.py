@@ -1,5 +1,6 @@
 from logimage import Logimage
 import time
+from tqdm import tqdm
 
 logimage_3_5 = Logimage(
     left_constraints=[
@@ -122,6 +123,39 @@ logimage_15_13 = Logimage(
 )
 
 
+def build_square_test_logimage(n: int):
+    assert n >= 3, "No real sense for so little logimages!"
+    constraints = [[] for _ in range(n)]
+    if n % 2 == 0:
+        for even_constraint_rank in range(0, n, 2):
+            try:
+                constraints[even_constraint_rank].append(2)
+            except IndexError:
+                print(even_constraint_rank)
+                print(constraints)
+                raise ValueError
+            for remaining in range(even_constraint_rank + 2, n, 2):
+                constraints[even_constraint_rank].append(1)
+
+        for odd_constraint_rank in range(1, n, 2):
+            constraints[odd_constraint_rank].append(odd_constraint_rank + 1)
+            for _ in range(odd_constraint_rank + 2, n, 2):
+                constraints[odd_constraint_rank].append(1)
+
+    else:
+        for even_constraint_rank in range(0, n - 2, 2):
+            constraints[even_constraint_rank].append(2)
+            for remaining in range(even_constraint_rank + 2, n - 2, 2):
+                constraints[even_constraint_rank].append(1)
+            constraints[n - 1] = [1]
+
+        for odd_constraint_rank in range(1, n, 2):
+            constraints[odd_constraint_rank].append(odd_constraint_rank + 1)
+            for _ in range(odd_constraint_rank + 2, n, 2):
+                constraints[odd_constraint_rank].append(1)
+    return Logimage(constraints, constraints)
+
+
 def record_3_5():
     start = time.time()
     solution = logimage_3_5.solve()
@@ -168,3 +202,16 @@ def record_15_13():
     solution.draw()
     elapsed = time.time() - start
     print("Time elapsed: {:.3f} seconds".format(elapsed))
+
+
+def benchmark():
+    sizes = []
+    times = []
+    for size in range(3, 13):
+        sizes.append(size)
+        log = build_square_test_logimage(size)
+        start = time.time()
+        _ = log.solve()
+        elapsed = time.time() - start
+        times.append(elapsed)
+        print(f"Logimage {size}*{size}: {elapsed:.3f} seconds")

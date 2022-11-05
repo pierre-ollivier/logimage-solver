@@ -18,8 +18,6 @@ def test0():
         [1], [0], [1], [0], [1], [1], [0]
     ]))
 
-    print(log.is_solution(board))
-    print(log.is_solution(board2))
     assert log.is_solution(board2)
     assert not(log.is_solution(board))
 
