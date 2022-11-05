@@ -1,20 +1,19 @@
 from typing import List, Tuple
 import numpy as np
+from numpy.typing import NDArray
 
 
 class Board:
-    def __init__(self, height: int = None, width: int = None, data: List[List[int]] = None):
+    def __init__(self, height: int = None, width: int = None, data: NDArray = None):
         if height is None or width is None:
             if data is None:
                 raise ValueError(
                     "Building a board requires providing either its width and its height, or its initial data.")
             else:
-                height = len(data)
-                width = len(data[0])
+                height, width = data.shape
         elif data is None:
             data = np.ones(shape=(height, width))
             data *= -1
-            data = data.tolist()
 
         self.height = height
         self.width = width
@@ -40,15 +39,14 @@ class Board:
         """
         Sets the value of the square of coordinates (`h_coord`, `w_coord`) to `value`. 
         """
-        self.data[h_coord][w_coord] = value
+        self.data[h_coord, w_coord] = value
 
     def find_first_empty_square(self) -> Tuple[int, int]:
         data = self.data
         if len(data) == 0:
             raise ValueError(
                 "Trying to find an empty square in an empty board, which is nonsense.")
-        for i in range(len(data)):
-            for j in range(len(data[0])):
-                if data[i][j] == -1:
-                    return (i, j)
+        for i, j in np.ndindex(data.shape):
+            if data[i, j] == -1:
+                return (i, j)
         return (None, None)
