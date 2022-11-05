@@ -28,6 +28,19 @@ logimage_4_7 = Logimage(
     ]
 )
 
+logimage_5_8 = Logimage(
+    left_constraints=[
+        [5, 1],
+        [6],
+        [3, 1, 1],
+        [1, 1, 3],
+        [5]
+    ],
+    top_constraints=[
+        [2], [5], [3, 1], [2, 2], [3, 1], [2, 2], [1], [1, 2]
+    ]
+)
+
 logimage_6_9 = Logimage(
     left_constraints=[
         [5, 1],
@@ -124,12 +137,22 @@ def record_4_7():
     elapsed = time.time() - start
     print("Time elapsed: {:.3f} seconds".format(elapsed))
 
+
+def record_5_8():
+    start = time.time()
+    solution = logimage_5_8.solve()
+    solution.draw()
+    elapsed = time.time() - start
+    print("Time elapsed: {:.3f} seconds".format(elapsed))
+
+
 def record_6_9():
     start = time.time()
     solution = logimage_6_9.solve()
     solution.draw()
     elapsed = time.time() - start
     print("Time elapsed: {:.3f} seconds".format(elapsed))
+
 
 def record_14_10():
     start = time.time()

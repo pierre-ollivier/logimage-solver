@@ -24,9 +24,14 @@ class Logimage:
             else:
                 return (False, None)
         else:
+            FIRST_VALUE = 1
+            SECOND_VALUE = 0
+            if sum(self.left_constraints[h]) + sum(self.top_constraints[w]) < (self.height + self.width)/2:
+                # The missing value is more likely to be 0 than 1
+                (FIRST_VALUE, SECOND_VALUE) = (0, 1)
             # We first try to fill the square
             board_with_fill_1 = deepcopy(board)
-            board_with_fill_1.set_square(h, w, 1)
+            board_with_fill_1.set_square(h, w, FIRST_VALUE)
             self.surely_fill_empty_squares(board_with_fill_1)
             is_f, sol = self.is_fillable(board_with_fill_1)
             if is_f:
@@ -34,7 +39,7 @@ class Logimage:
             else:
                 # So now we try to put a blank square
                 board_with_fill_0 = deepcopy(board)
-                board_with_fill_0.set_square(h, w, 0)
+                board_with_fill_0.set_square(h, w, SECOND_VALUE)
                 self.surely_fill_empty_squares(board_with_fill_0)
                 is_f, sol = self.is_fillable(board_with_fill_0)
                 if is_f:
@@ -93,7 +98,7 @@ class Logimage:
             sum_constraints = sum(left_constraint)
             min_space_taken = sum_constraints + len(left_constraint) - 1
             for j in range(self.width):
-                if board.data[i][j] == 1 or board.data[i][j] == -1:
+                if board.data[i][j] == 1:
                     return  # nothing can be concluded
                 if self.width - j <= min_space_taken:
                     board.set_square(i, j, 1)
@@ -104,7 +109,7 @@ class Logimage:
             sum_constraints = sum(top_constraint)
             min_space_taken = sum_constraints + len(top_constraint) - 1
             for i in range(self.height):
-                if board.data[i][j] == 1 or board.data[i][j] == -1:
+                if board.data[i][j] == 1:
                     return  # nothing can be concluded
                 if self.height - i <= min_space_taken:
                     board.set_square(i, j, 1)
