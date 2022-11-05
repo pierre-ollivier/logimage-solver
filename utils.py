@@ -44,8 +44,8 @@ def currently_satisfied_constraints(board_extract: List[int]) -> Tuple[List[int]
     """
     Analyses the constraints currently satisfied by board_extract, and if a constraint is being partially satisfied.
     Examples: 
-    `board` = [X X X O X], return ([3, 1], True)
-    `board` = [X X X O X O], return ([3, 1], False)
+    - `board` = [X X X O X] -> `([3, 1], True)`
+    - `board` = [X X X O X O] -> `([3, 1], False)`
     """
     res = []
     current_constraint = None
@@ -64,7 +64,14 @@ def currently_satisfied_constraints(board_extract: List[int]) -> Tuple[List[int]
         return (res, False)
 
 
-def get_current_constraint(constraint_list: List[int], board_extract: List[int], index: int = None) -> int:
+def get_following_values(constraint_list: List[int], board_extract: List[int], index: int = None) -> Tuple[bool, int]:
+    """
+    Returns whether the current sequence should be continued (and if yes, the number of 1s to add) or not.
+    Examples :
+    - `constraint_list` = [2, 4], `board` = [X X O X] -> `(True, 3)`
+    - `constraint_list` = [2, 1], `board` = [X X O X] -> `(False, 0)`
+    - `constraint_list` = [2, 1], `board` = [X X O] -> `(True, 0)` (no obligation to put a 0)
+    """
 
     if index is None:
         for i, val in enumerate(board_extract):
@@ -74,4 +81,18 @@ def get_current_constraint(constraint_list: List[int], board_extract: List[int],
     if index is None:
         return None
 
-    pass
+    satisfied_constraints, ongoing = currently_satisfied_constraints(
+        board_extract[:index])
+    if not ongoing:
+        return (True, 0)
+
+    for i in range(len(satisfied_constraints) - 1):
+        if satisfied_constraints[i] != constraint_list[i]: # bad news: we already know that we wont't find a solution
+            return (True, 100)
+
+    current_constraint = satisfied_constraints[-1]
+    expected_constraint = constraint_list[len(satisfied_constraints) - 1]
+    if current_constraint == expected_constraint:
+        return (False, 0)
+    else:
+        return (True, expected_constraint-current_constraint)

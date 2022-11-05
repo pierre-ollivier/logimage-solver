@@ -1,6 +1,6 @@
 from board import Board
 from typing import List, Tuple
-from utils import check_dim
+from utils import check_dim, get_following_values
 from copy import deepcopy
 
 
@@ -92,6 +92,34 @@ class Logimage:
                     board.set_square(i, j, 0)
                 if board.data[i][j] == 1:
                     sum_constraints -= 1
+
+        # Fill rows and columns where a constraint is partially satisfied
+
+        for i, left_constraint in enumerate(self.left_constraints):
+            for j in range(self.width):
+                if board.data[i][j] == -1:
+                    should_be_continued, n = get_following_values(
+                        left_constraint, board.data[i], index=j)
+                    if should_be_continued:
+                        for k in range(n):
+                            if j + k < self.width:
+                                board.set_square(i, j + k, 1)
+                    else:
+                        board.set_square(i, j, 0)
+                    break
+
+        for j, top_constraint in enumerate(self.top_constraints):
+            for i in range(self.height):
+                if board.data[i][j] == -1:
+                    should_be_continued, n = get_following_values(
+                        top_constraint, [board.data[k][j] for k in range(self.height)], index=j)
+                    if should_be_continued:
+                        for k in range(n):
+                            if i + k < self.height:
+                                board.set_square(i + k, j, 1)
+                    else:
+                        board.set_square(i, j, 0)
+                    break
 
         # When the maximum count of empty squares is reached in a row, fill the next square with 1
         for i, left_constraint in enumerate(self.left_constraints):
