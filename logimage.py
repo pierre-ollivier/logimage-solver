@@ -64,7 +64,7 @@ class Logimage:
         # When the first square of a row is filled, fill the next squares according to the constraint
         for i, left_constraint in enumerate(self.left_constraints):
             constraint = left_constraint[0]
-            if board.data[i][0] == 1 or constraint == self.width:
+            if board.data[i, 0] == 1 or constraint == self.width:
                 for j in range(constraint):
                     board.set_square(i, j, 1)
                 if constraint < self.width:
@@ -73,7 +73,7 @@ class Logimage:
         # When the first square of a column is filled, fill the next squares according to the constraint
         for j, top_constraint in enumerate(self.top_constraints):
             constraint = top_constraint[0]
-            if board.data[0][j] == 1 or constraint == self.height:
+            if board.data[0, j] == 1 or constraint == self.height:
                 for i in range(constraint):
                     board.set_square(i, j, 1)
                 if constraint < self.height:
@@ -85,7 +85,7 @@ class Logimage:
             for j in range(self.width):
                 if sum_constraints <= 0:
                     board.set_square(i, j, 0)
-                if board.data[i][j] == 1:
+                if board.data[i, j] == 1:
                     sum_constraints -= 1
 
         # When the maximum count of filled squares is reached in a column, fill the next squares with 0
@@ -94,14 +94,14 @@ class Logimage:
             for i in range(self.height):
                 if sum_constraints <= 0:
                     board.set_square(i, j, 0)
-                if board.data[i][j] == 1:
+                if board.data[i, j] == 1:
                     sum_constraints -= 1
 
         # Fill rows and columns where a constraint is partially satisfied
 
         for i, left_constraint in enumerate(self.left_constraints):
             for j in range(self.width):
-                if board.data[i][j] == -1:
+                if board.data[i, j] == -1:
                     should_be_continued, n = get_following_values(
                         left_constraint, board.data[i], index=j)
                     if should_be_continued:
@@ -114,9 +114,9 @@ class Logimage:
 
         for j, top_constraint in enumerate(self.top_constraints):
             for i in range(self.height):
-                if board.data[i][j] == -1:
+                if board.data[i, j] == -1:
                     should_be_continued, n = get_following_values(
-                        top_constraint, [board.data[k][j] for k in range(self.height)], index=j)
+                        top_constraint, board.data[:, j], index=i)
                     if should_be_continued:
                         for k in range(n):
                             if i + k < self.height:
@@ -130,7 +130,7 @@ class Logimage:
             sum_constraints = sum(left_constraint)
             min_space_taken = sum_constraints + len(left_constraint) - 1
             for j in range(self.width):
-                if board.data[i][j] == 1:
+                if board.data[i, j] == 1:
                     return  # nothing can be concluded
                 if self.width - j <= min_space_taken:
                     board.set_square(i, j, 1)
@@ -141,7 +141,7 @@ class Logimage:
             sum_constraints = sum(top_constraint)
             min_space_taken = sum_constraints + len(top_constraint) - 1
             for i in range(self.height):
-                if board.data[i][j] == 1:
+                if board.data[i, j] == 1:
                     return  # nothing can be concluded
                 if self.height - i <= min_space_taken:
                     board.set_square(i, j, 1)
@@ -158,6 +158,6 @@ class Logimage:
             if not(check_dim(constraint, board.data[i])):
                 return False
         for i, constraint in enumerate(self.top_constraints):
-            if not(check_dim(constraint, [board.data[k][i] for k in range(len(board.data))])):
+            if not(check_dim(constraint, board.data[:, i])):
                 return False
         return True

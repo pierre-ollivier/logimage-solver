@@ -10,14 +10,16 @@ def test0():
         left_constraints=[[1], [], [1], [], [1], [1], []]
     )
 
-    board = Board(data=([
+    board = Board(data=np.array([
                         [1, 0, 1, 0, 1, 1, 0]
                         ]))
 
-    board2 = Board(data=([
+    board2 = Board(data=np.array([
         [1], [0], [1], [0], [1], [1], [0]
     ]))
 
+    print(log.is_solution(board))
+    print(log.is_solution(board2))
     assert log.is_solution(board2)
     assert not(log.is_solution(board))
 
@@ -31,7 +33,7 @@ def test1():
         top_constraints=[[2], [2], [3], [1], [3], [1]]
     )
 
-    board = Board(data=([
+    board = Board(data=np.array([
                         [1, 0, 1, 0, 1, 0],
                         [1, 1, 1, 0, 1, 1],
                         [0, 1, 1, 1, 1, 0]

@@ -1,19 +1,23 @@
 from typing import List, Tuple
+import numpy as np
+from numpy.typing import NDArray
 
 
-def check_dim(constraints: List[int], board_extract: List[int]) -> bool:
+def check_dim(constraints: List[int], board_extract: NDArray) -> bool:
     """
     Checks whether a line or column extracted from a `Board` respects the constraints.
+
     Args:
-    `constraints`: the constraints, for example [1, 3, 2].
-    `board_extract`: the extract from the board, where 1 corresponds to a full square, 0 to an empty square, and -1 to a square
+    - `constraints`: the constraints, for example [1, 3, 2].
+    - `board_extract`: the extract from the board, where 1 corresponds to a full square, 0 to an empty square, and -1 to a square
     that is undetermined.
-    Returns `True` if `board_extract_ contains only 0s and 1s and the constraints are satisfied.
+
+    Returns `True` if `board_extract_` contains only 0s and 1s and the constraints are satisfied.
     """
     if constraints == []:
         # with no constraints, all the squares should be blank
-        return board_extract == len(board_extract) * [0]
-    if board_extract == []:
+        return board_extract.tolist() == [0]*board_extract.size
+    if board_extract.size == 0:
         return False
     elif board_extract[0] == 0:
         # recursive call
@@ -40,7 +44,7 @@ def check_dim(constraints: List[int], board_extract: List[int]) -> bool:
                          + str(board_extract[0]))
 
 
-def currently_satisfied_constraints(board_extract: List[int]) -> Tuple[List[int], bool]:
+def currently_satisfied_constraints(board_extract: NDArray) -> Tuple[List[int], bool]:
     """
     Analyses the constraints currently satisfied by board_extract, and if a constraint is being partially satisfied.
     Examples: 
@@ -64,7 +68,7 @@ def currently_satisfied_constraints(board_extract: List[int]) -> Tuple[List[int]
         return (res, False)
 
 
-def get_following_values(constraint_list: List[int], board_extract: List[int], index: int = None) -> Tuple[bool, int]:
+def get_following_values(constraint_list: List[int], board_extract: NDArray, index: int = None) -> Tuple[bool, int]:
     """
     Returns whether the current sequence should be continued (and if yes, the number of 1s to add) or not.
     Examples :
@@ -87,7 +91,8 @@ def get_following_values(constraint_list: List[int], board_extract: List[int], i
         return (True, 0)
 
     for i in range(len(satisfied_constraints) - 1):
-        if satisfied_constraints[i] != constraint_list[i]: # bad news: we already know that we wont't find a solution
+        # bad news: we already know that we wont't find a solution
+        if satisfied_constraints[i] != constraint_list[i]:
             return (True, 100)
 
     current_constraint = satisfied_constraints[-1]
