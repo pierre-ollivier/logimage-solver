@@ -4,13 +4,6 @@ from utils import check_dim
 import numpy as np
 
 
-def test8checkdim():
-    assert check_dim(constraints=[1, 2], board_extract=[
-        1, 0, 0, 1, 1, 0, 0])
-    assert check_dim(constraints=[1, 2], board_extract=[
-        0, 1, 0, 0, 1, 1, 0, 0])
-
-
 def test0():
     log = Logimage(
         top_constraints=[[1, 1, 2]],
@@ -50,4 +43,3 @@ def test1():
 def run():
     test0()
     test1()
-    print("All tests were run, no error was encountered!")

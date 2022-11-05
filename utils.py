@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 
 def check_dim(constraints: List[int], board_extract: List[int]) -> bool:
@@ -38,3 +38,40 @@ def check_dim(constraints: List[int], board_extract: List[int]) -> bool:
     else:
         raise ValueError("A board should only contain the values -1, 0 or 1. But we found the value "
                          + str(board_extract[0]))
+
+
+def currently_satisfied_constraints(board_extract: List[int]) -> Tuple[List[int], bool]:
+    """
+    Analyses the constraints currently satisfied by board_extract, and if a constraint is being partially satisfied.
+    Examples: 
+    `board` = [X X X O X], return ([3, 1], True)
+    `board` = [X X X O X O], return ([3, 1], False)
+    """
+    res = []
+    current_constraint = None
+    for square in board_extract:
+        if square == 1:
+            current_constraint = 1 if current_constraint is None else current_constraint + 1
+        else:
+            if current_constraint is not None:
+                res.append(current_constraint)
+                current_constraint = None
+
+    if current_constraint is not None:
+        res.append(current_constraint)
+        return (res, True)
+    else:
+        return (res, False)
+
+
+def get_current_constraint(constraint_list: List[int], board_extract: List[int], index: int = None) -> int:
+
+    if index is None:
+        for i, val in enumerate(board_extract):
+            if val == -1:
+                index = i
+                break
+    if index is None:
+        return None
+
+    pass
