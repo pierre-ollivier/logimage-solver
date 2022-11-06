@@ -1,6 +1,6 @@
 from board import Board
 from typing import List, Tuple
-from utils import check_dim, get_following_values
+from utils import check_dim, get_following_values, currently_satisfied_constraints
 from copy import deepcopy
 from exceptions import *
 
@@ -161,3 +161,16 @@ class Logimage:
             if not(check_dim(constraint, board.data[:, i])):
                 return False
         return True
+
+def board_to_logimage(board: Board) -> Logimage:
+    """
+    Transposes a filled `Board` to the corresponding `Logimage`.
+    """
+    left_constraints = []
+    top_constraints = []
+    height, width = board.data.shape
+    for i in range(height):
+        left_constraints.append(currently_satisfied_constraints(board.data[i])[0])
+    for j in range(width):
+        top_constraints.append(currently_satisfied_constraints(board.data[:, j])[0])
+    return Logimage(left_constraints=left_constraints, top_constraints=top_constraints)
