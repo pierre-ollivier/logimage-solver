@@ -29,8 +29,8 @@ def to_board(array: NDArray, threshold: int = 128) -> Board:
     return Board(data=arr)
 
 
-img = grayscale_img("./images/chien2.jpg")
-img = resize_img(img, (5, 5))
+img = grayscale_img("./images/chien1.jpg")
+img = resize_img(img, (30, 30))
 arr = np.array(img)
 board = to_board(arr, 210)
 board.draw()

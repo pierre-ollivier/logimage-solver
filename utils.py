@@ -38,6 +38,7 @@ def check_dim(constraints: List[int], board_extract: NDArray) -> bool:
         else:  # wrong count of full squares
             return False
     elif board_extract[0] == -1:
+        print("Checking on a non-filled board extract.")
         return False  # corresponds to an undetermined case
     else:
         raise ValueError("A board should only contain the values -1, 0 or 1. But we found the value "
