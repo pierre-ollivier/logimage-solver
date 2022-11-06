@@ -31,15 +31,18 @@ class Logimage:
                 # The missing value is more likely to be 0 than 1
                 (FIRST_VALUE, SECOND_VALUE) = (0, 1)
             # We first try to fill the square
-            board_with_fill_1 = deepcopy(board)
-            board_with_fill_1.set_square(h, w, FIRST_VALUE)
             try:
+                board_with_fill_1 = deepcopy(board)
+                board_with_fill_1.set_square(h, w, FIRST_VALUE)
                 self.surely_fill_empty_squares(board_with_fill_1)
                 is_f, sol = self.is_fillable(board_with_fill_1)
                 if is_f:
                     return (True, sol)
                 else:
-                    # So now we try to put a blank square
+                    raise NoSolutionError
+            except NoSolutionError:
+                # So now we try to put a blank square
+                try:
                     board_with_fill_0 = deepcopy(board)
                     board_with_fill_0.set_square(h, w, SECOND_VALUE)
                     self.surely_fill_empty_squares(board_with_fill_0)
@@ -48,8 +51,9 @@ class Logimage:
                         return True, sol
                     else:
                         return (False, None)
-            except NoSolutionError:
-                return (False, None)
+                except NoSolutionError:
+                    # Now, the only possibility is that the board given in entry is false
+                    return (False, None)
 
     def solve(self) -> Board:
         empty_board = Board(height=self.height, width=self.width)
@@ -63,21 +67,29 @@ class Logimage:
     def surely_fill_empty_squares(self, board: Board) -> None:
         # When the first square of a row is filled, fill the next squares according to the constraint
         for i, left_constraint in enumerate(self.left_constraints):
-            constraint = left_constraint[0]
-            if board.data[i, 0] == 1 or constraint == self.width:
-                for j in range(constraint):
-                    board.set_square(i, j, 1)
-                if constraint < self.width:
-                    board.set_square(i, constraint, 0)
+            if len(left_constraint) == 0:  # Blank row
+                for j in range(self.width):
+                    board.set_square(i, j, 0)
+            else:
+                constraint = left_constraint[0]
+                if board.data[i, 0] == 1 or constraint == self.width:
+                    for j in range(constraint):
+                        board.set_square(i, j, 1)
+                    if constraint < self.width:
+                        board.set_square(i, constraint, 0)
 
         # When the first square of a column is filled, fill the next squares according to the constraint
         for j, top_constraint in enumerate(self.top_constraints):
-            constraint = top_constraint[0]
-            if board.data[0, j] == 1 or constraint == self.height:
-                for i in range(constraint):
-                    board.set_square(i, j, 1)
-                if constraint < self.height:
-                    board.set_square(constraint, j, 0)
+            if len(top_constraint) == 0:  # Blank column
+                for i in range(self.height):
+                    board.set_square(i, j, 0)
+            else:
+                constraint = top_constraint[0]
+                if board.data[0, j] == 1 or constraint == self.height:
+                    for i in range(constraint):
+                        board.set_square(i, j, 1)
+                    if constraint < self.height:
+                        board.set_square(constraint, j, 0)
 
         # When the maximum count of filled squares is reached in a row, fill the next squares with 0
         for i, left_constraint in enumerate(self.left_constraints):
@@ -151,7 +163,9 @@ class Logimage:
         """
         Checks whether the `Board` instance is a solution of the logimage `log`.
         """
+
         if self.height != board.height or self.width != board.width:
+            print("Dimensions do not match.")
             return False
 
         for i, constraint in enumerate(self.left_constraints):
@@ -162,6 +176,7 @@ class Logimage:
                 return False
         return True
 
+
 def board_to_logimage(board: Board) -> Logimage:
     """
     Transposes a filled `Board` to the corresponding `Logimage`.
@@ -170,7 +185,9 @@ def board_to_logimage(board: Board) -> Logimage:
     top_constraints = []
     height, width = board.data.shape
     for i in range(height):
-        left_constraints.append(currently_satisfied_constraints(board.data[i])[0])
+        left_constraints.append(
+            currently_satisfied_constraints(board.data[i])[0])
     for j in range(width):
-        top_constraints.append(currently_satisfied_constraints(board.data[:, j])[0])
+        top_constraints.append(
+            currently_satisfied_constraints(board.data[:, j])[0])
     return Logimage(left_constraints=left_constraints, top_constraints=top_constraints)

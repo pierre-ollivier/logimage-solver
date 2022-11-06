@@ -207,11 +207,11 @@ def record_15_13():
 def benchmark():
     sizes = []
     times = []
-    for size in range(3, 13):
+    for size in range(3, 21):
         sizes.append(size)
         log = build_square_test_logimage(size)
         start = time.time()
-        _ = log.solve()
+        solution = log.solve()
         elapsed = time.time() - start
         times.append(elapsed)
         print(f"Logimage {size}*{size}: {elapsed:.3f} seconds")

@@ -1,6 +1,7 @@
 from typing import List, Tuple
 import numpy as np
 from numpy.typing import NDArray
+from exceptions import *
 
 
 class Board:
@@ -14,6 +15,7 @@ class Board:
         elif data is None:
             data = np.ones(shape=(height, width))
             data *= -1
+            data = data.astype(int)
 
         self.height = height
         self.width = width
@@ -37,8 +39,11 @@ class Board:
 
     def set_square(self, h_coord: int, w_coord: int, value: int) -> None:
         """
-        Sets the value of the square of coordinates (`h_coord`, `w_coord`) to `value`. 
+        Sets the value of the square of coordinates (`h_coord`, `w_coord`) to `value`.
+        If a 0 is replaced by a 1 or a 1 is replaced by a 0, raises `NoSolutionError` to stop the current search.
         """
+        if (self.data[h_coord, w_coord] == 1 and value == 0) or (self.data[h_coord, w_coord] == 0 and value == 1):
+            raise NoSolutionError
         self.data[h_coord, w_coord] = value
 
     def find_first_empty_square(self) -> Tuple[int, int]:
@@ -47,6 +52,6 @@ class Board:
             raise ValueError(
                 "Trying to find an empty square in an empty board, which is nonsense.")
         for i, j in np.ndindex(data.shape):
-            if data[i, j] == -1:
+            if data[i, j] == -1 or abs(data[i, j] + 1) < 1e-3:
                 return (i, j)
         return (None, None)
