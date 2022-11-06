@@ -7,3 +7,4 @@ runTestboard()
 print("All tests were run, no error was encountered!")
 
 benchmark()
+benchmark_with_trials(10, 5, 8)

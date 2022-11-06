@@ -3,6 +3,8 @@ from typing import List, Tuple
 from utils import check_dim, get_following_values, currently_satisfied_constraints
 from copy import deepcopy
 from exceptions import *
+from tqdm import tqdm
+import numpy as np
 
 
 class Logimage:
@@ -17,8 +19,8 @@ class Logimage:
         self.left_constraints = left_constraints
         self.top_constraints = top_constraints
 
-    def is_fillable(self, board: Board) -> Tuple[bool, Board]:
-        (h, w) = board.find_border_empty_square()
+    def is_fillable(self, board: Board, research_function=Board.find_border_empty_square) -> Tuple[bool, Board]:
+        (h, w) = research_function(board)
         if h is None:
             if self.is_solution(board):
                 return (True, board)
@@ -35,7 +37,8 @@ class Logimage:
                 board_with_fill_1 = deepcopy(board)
                 board_with_fill_1.set_square(h, w, FIRST_VALUE)
                 self.surely_fill_empty_squares(board_with_fill_1)
-                is_f, sol = self.is_fillable(board_with_fill_1)
+                is_f, sol = self.is_fillable(
+                    board_with_fill_1, research_function)
                 if is_f:
                     return (True, sol)
                 else:
@@ -46,7 +49,8 @@ class Logimage:
                     board_with_fill_0 = deepcopy(board)
                     board_with_fill_0.set_square(h, w, SECOND_VALUE)
                     self.surely_fill_empty_squares(board_with_fill_0)
-                    is_f, sol = self.is_fillable(board_with_fill_0)
+                    is_f, sol = self.is_fillable(
+                        board_with_fill_0, research_function)
                     if is_f:
                         return True, sol
                     else:
@@ -55,14 +59,26 @@ class Logimage:
                     # Now, the only possibility is that the board given in entry is false
                     return (False, None)
 
-    def solve(self) -> Board:
+    def solve(self, research_function=Board.find_border_empty_square) -> Board:
         empty_board = Board(height=self.height, width=self.width)
-        is_f, sol = self.is_fillable(empty_board)
+        is_f, sol = self.is_fillable(empty_board, research_function)
         if is_f:
             return sol
         else:
             raise ValueError(
                 "Tried (and failed) to solve a logimage with no solution.")
+
+    def check_for_multiple_solutions(self, trial_count=10):
+        print("Naturally solving the logimage...")
+        initial_solution = self.solve()
+        print("Try to find a different solution...")
+        for trial in tqdm(range(trial_count)):
+            sol = self.solve(
+                research_function=Board.find_random_border_empty_square)
+            if not(np.array_equal(sol.data, initial_solution.data)):
+                print("\nTwo different solutions were found.")
+                return False
+        return True
 
     def surely_fill_empty_squares(self, board: Board) -> None:
         # When the first square of a row is filled, fill the next squares according to the constraint

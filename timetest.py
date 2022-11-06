@@ -204,14 +204,24 @@ def record_15_13():
     print("Time elapsed: {:.3f} seconds".format(elapsed))
 
 
-def benchmark():
+def benchmark(max_size: int = 20):
     sizes = []
     times = []
-    for size in range(3, 21):
+    for size in range(3, max_size + 1):
         sizes.append(size)
         log = build_square_test_logimage(size)
         start = time.time()
         solution = log.solve()
         elapsed = time.time() - start
         times.append(elapsed)
+        print(f"Logimage {size}*{size}: {elapsed:.3f} seconds")
+
+
+def benchmark_with_trials(trial_count: int = 10, min_size: int = 19, max_size: int = 20):
+    for size in range(min_size, max_size + 1):
+        log = build_square_test_logimage(size)
+        start = time.time()
+        multiple_solutions = log.check_for_multiple_solutions(trial_count)
+        elapsed = time.time() - start
+        print(size, multiple_solutions)
         print(f"Logimage {size}*{size}: {elapsed:.3f} seconds")

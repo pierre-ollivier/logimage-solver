@@ -95,10 +95,14 @@ def get_following_values(constraint_list: List[int], board_extract: NDArray, ind
         # bad news: we already know that we wont't find a solution
         if satisfied_constraints[i] != constraint_list[i]:
             return (True, 100)
-
-    current_constraint = satisfied_constraints[-1]
-    expected_constraint = constraint_list[len(satisfied_constraints) - 1]
-    if current_constraint == expected_constraint:
-        return (False, 0)
-    else:
-        return (True, expected_constraint-current_constraint)
+    try:
+        current_constraint = satisfied_constraints[-1]
+        expected_constraint = constraint_list[len(satisfied_constraints) - 1]
+        if current_constraint == expected_constraint:
+            return (False, 0)
+        else:
+            return (True, expected_constraint - current_constraint)
+    except IndexError:
+        print("Current_constraint: ", current_constraint)
+        print("Constraint_list: ", constraint_list)
+        print("Satisfied_constraints", satisfied_constraints)
