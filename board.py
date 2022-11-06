@@ -2,6 +2,7 @@ from typing import List, Tuple
 import numpy as np
 from numpy.typing import NDArray
 from exceptions import *
+import random as rd
 
 
 class Board:
@@ -55,3 +56,34 @@ class Board:
             if data[i, j] == -1 or abs(data[i, j] + 1) < 1e-3:
                 return (i, j)
         return (None, None)
+
+    def find_random_empty_square(self) -> Tuple[int, int]:
+        data = self.data
+        if len(data) == 0:
+            raise ValueError(
+                "Trying to find an empty square in an empty board, which is nonsense.")
+        if not(-1 in data):
+            return (None, None)
+        while True:
+            i = rd.randint(0, self.height - 1)
+            j = rd.randint(0, self.width - 1)
+            if data[i, j] == -1 or abs(data[i, j] + 1) < 1e-3:
+                return (i, j)
+
+    def find_border_empty_square(self) -> Tuple[int, int]:
+        data = self.data
+        if len(data) == 0:
+            raise ValueError(
+                "Trying to find an empty square in an empty board, which is nonsense.")
+        for i in range(self.height):
+            if data[i, 0] == -1:
+                return (i, 0)
+        for j in range(self.width):
+            if data[0, j] == -1:
+                return (0, j)
+        for i in range(1, self.height):
+            for j in range(1,self.width):
+                if data[i, j] == -1:
+                    return (i, j)
+        return (None, None)
+        

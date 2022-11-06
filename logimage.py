@@ -18,7 +18,7 @@ class Logimage:
         self.top_constraints = top_constraints
 
     def is_fillable(self, board: Board) -> Tuple[bool, Board]:
-        (h, w) = board.find_first_empty_square()
+        (h, w) = board.find_border_empty_square()
         if h is None:
             if self.is_solution(board):
                 return (True, board)
@@ -27,10 +27,9 @@ class Logimage:
         else:
             FIRST_VALUE = 1
             SECOND_VALUE = 0
+            # There was a try to fine-tune these values according to the constraints, but it wasn't successful
+            # as a 1 provides much more information than a 0.
 
-            """if sum(self.left_constraints[h]) + sum(self.top_constraints[w]) < (self.height + self.width)/2:
-                # The missing value is more likely to be 0 than 1
-                (FIRST_VALUE, SECOND_VALUE) = (0, 1)"""
             # We first try to fill the square
             try:
                 board_with_fill_1 = deepcopy(board)
@@ -138,12 +137,12 @@ class Logimage:
                         board.set_square(i, j, 0)
                     break
 
-        """# When the maximum count of empty squares is reached in a row, fill the next square with 1
+        # When the maximum count of empty squares is reached in a row, fill the next square with 1
         for i, left_constraint in enumerate(self.left_constraints):
             sum_constraints = sum(left_constraint)
             min_space_taken = sum_constraints + len(left_constraint) - 1
             for j in range(self.width):
-                if board.data[i, j] == 1:
+                if board.data[i, j] != 0:
                     return  # nothing can be concluded
                 if self.width - j <= min_space_taken:
                     board.set_square(i, j, 1)
@@ -154,11 +153,11 @@ class Logimage:
             sum_constraints = sum(top_constraint)
             min_space_taken = sum_constraints + len(top_constraint) - 1
             for i in range(self.height):
-                if board.data[i, j] == 1:
+                if board.data[i, j] != 0:
                     return  # nothing can be concluded
                 if self.height - i <= min_space_taken:
                     board.set_square(i, j, 1)
-                    self.surely_fill_empty_squares(board)  # recursive call"""
+                    self.surely_fill_empty_squares(board)  # recursive call
 
     def is_solution(self, board: Board) -> bool:
         """
