@@ -1,11 +1,14 @@
 import tkinter as tk
 from tkinter import filedialog
+from PIL import ImageTk, Image
 
 imPath = "test"
 
 main_window = tk.Tk()
 insert_label = tk.Label(text="Ajoutez votre image ici")
 insert_label.pack()
+
+image = tk.Label()
 
 
 def load_image_button_pressed():
@@ -17,17 +20,20 @@ def validation_button_pressed():
 
 
 def openImageFile():
-    global imPath
+    global img, image
     imPath = filedialog.askopenfilename(initialdir=".", title="Open an image", filetypes=(
         ("Image file", "*.png"), ("Image file", "*.jpeg"), ("Image file", "*.jpg"), ("All File Types", "*.*")))
     print("Image successfully loaded")
-    print(imPath)
-    return True
+    if imPath:
+        img=ImageTk.PhotoImage(Image.open(imPath))
+        image.configure(image=img)
 
 
 load_image_button = tk.Button(
     text="Choisissez une image...", command=load_image_button_pressed)
 load_image_button.pack()
+
+image.pack()
 
 validation_button = tk.Button(
     text="Valider", command=validation_button_pressed)
