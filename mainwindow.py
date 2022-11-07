@@ -25,7 +25,9 @@ def openImageFile():
         ("Image file", "*.png"), ("Image file", "*.jpeg"), ("Image file", "*.jpg"), ("All File Types", "*.*")))
     print("Image successfully loaded")
     if imPath:
-        img=ImageTk.PhotoImage(Image.open(imPath))
+        PILimg = Image.open(imPath)
+        PILimg = PILimg.resize((200, 200))
+        img = ImageTk.PhotoImage(PILimg)
         image.configure(image=img)
 
 
