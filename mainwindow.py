@@ -12,8 +12,7 @@ COLUMNS_COUNT = 3
 
 
 root = tk.Tk()
-svH = tk.StringVar()
-svV = tk.StringVar()
+
 insert_label = tk.Label(text="Ajoutez votre image ici")
 insert_label.pack()
 
@@ -25,7 +24,9 @@ def load_image_button_pressed():
 
 
 def validation_button_pressed():
-    global imPath, canvas_logimage
+    global imPath, canvas_logimage, LINES_COUNT, COLUMNS_COUNT
+    LINES_COUNT = int(entry_horizontal.get())
+    COLUMNS_COUNT = int(entry_vertical.get())
     board = board_from_image(imPath)
     draw_board_in_canvas(canvas_logimage, board)
 
@@ -46,8 +47,6 @@ def draw_board_in_canvas(canvas: tk.Canvas, board: Board) -> None:
     global LINES_COUNT, COLUMNS_COUNT
     draw_lines()
     data = board.data
-    board.draw()
-    print(data.shape)
     for i, j in np.ndindex(data.shape):
         if data[i, j] == 1:
             canvas.create_rectangle(
@@ -68,16 +67,6 @@ def board_from_image(path: str):
     return board
 
 
-def set_entry_horizontal():
-    global LINES_COUNT, svH
-    LINES_COUNT = int(svH.get())
-
-
-def set_entry_vertical():
-    global COLUMNS_COUNT, svV
-    COLUMNS_COUNT = int(svV.get())
-
-
 load_image_button = tk.Button(
     text="Choisissez une image...", command=load_image_button_pressed)
 load_image_button.pack()
@@ -86,12 +75,10 @@ image.pack()
 
 label_entry_horizontal = tk.Label(
     text="Entrez le nombre de lignes du logimage")
-entry_horizontal = tk.Entry(root,
-                            textvariable=svH, validate="focusout", validatecommand=set_entry_horizontal)
+entry_horizontal = tk.Entry(root)
 label_entry_vertical = tk.Label(
     text="Entrez le nombre de colonnes du logimage")
-entry_vertical = tk.Entry(root,
-                          textvariable=svV, validate="focusout", validatecommand=set_entry_vertical)
+entry_vertical = tk.Entry(root)
 
 label_entry_horizontal.pack()
 entry_horizontal.pack()
@@ -113,11 +100,8 @@ canvas_logimage.pack()
 
 def draw_lines():
     for line_number in range(LINES_COUNT + 1):
-        """print(line_number)
-        print((0, line_number * 200/LINES_COUNT,
-              200, line_number * 200/LINES_COUNT))
         canvas_logimage.create_line(
-            0, line_number * 200/LINES_COUNT, 200, line_number * 200/LINES_COUNT)"""
+            0, line_number * 200/LINES_COUNT, 200, line_number * 200/LINES_COUNT)
     for column_number in range(COLUMNS_COUNT + 1):
         canvas_logimage.create_line(
             column_number * 200/COLUMNS_COUNT, 0, column_number * 200/COLUMNS_COUNT, 200)
