@@ -2,8 +2,10 @@ import tkinter as tk
 from tkinter import filedialog
 from PIL import ImageTk, Image
 from board import Board
+from logimage import board_to_logimage
 import numpy as np
 from images import grayscale_img, resize_img, to_board
+from logimagewindow import create_window
 
 imPath = "test"
 
@@ -29,6 +31,8 @@ def validation_button_pressed():
     COLUMNS_COUNT = int(entry_vertical.get())
     board = board_from_image(imPath)
     draw_board_in_canvas(canvas_logimage, board)
+    logimage = board_to_logimage(board)
+    create_window(logimage)
 
 
 def openImageFile():
