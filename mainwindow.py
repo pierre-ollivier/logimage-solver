@@ -38,7 +38,7 @@ load_image_button.pack()
 image.pack()
 
 slider = tk.Scale(from_=0, to=255, tickinterval=32,
-                  length=200, orient="horizontal")
+                  length=250, orient="horizontal")
 slider.pack()
 
 validation_button = tk.Button(
