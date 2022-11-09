@@ -23,7 +23,7 @@ def create_window(logimage: Logimage):
         canvas.create_line(100 + (1 + vline_index) * 500/LOG_WIDTH,
                            0, 100 + (1 + vline_index) * 500/LOG_WIDTH, 600)
         canvas.create_text(100 + (0.5 + vline_index) * 500 /
-                           LOG_WIDTH, 30, text=list_to_vertical_str(logimage.top_constraints[vline_index]))
+                           LOG_WIDTH, 15, text=list_to_vertical_str(logimage.top_constraints[vline_index]), anchor="n")
 
     for hline_index in range(LOG_HEIGHT):
         canvas.create_line(0, 100 + (1 + hline_index) * 500 /
