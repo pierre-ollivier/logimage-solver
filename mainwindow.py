@@ -50,7 +50,7 @@ def openImageFile():
 def draw_board_in_canvas(canvas: tk.Canvas, board: Board) -> None:
     global LINES_COUNT, COLUMNS_COUNT
     draw_lines()
-    data = board.data
+    data = board.data.T
     for i, j in np.ndindex(data.shape):
         if data[i, j] == 1:
             canvas.create_rectangle(
@@ -66,7 +66,7 @@ def board_from_image(path: str):
     global slider, LINES_COUNT, COLUMNS_COUNT
     img = grayscale_img(path)
     img = resize_img(img, (LINES_COUNT, COLUMNS_COUNT))  # TODO
-    arr = np.array(img).T
+    arr = np.array(img)
     board = to_board(arr, 255 - slider.get())
     return board
 

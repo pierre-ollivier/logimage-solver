@@ -19,13 +19,13 @@ def create_window(logimage: Logimage):
     for vline_index in range(LOG_WIDTH):
         canvas.create_line(100 + (1 + vline_index) * 500/LOG_WIDTH,
                            0, 100 + (1 + vline_index) * 500/LOG_WIDTH, 600)
-        canvas.create_text(100 + (1 + vline_index) * 500 /
-                           LOG_WIDTH, 0, text=str(logimage.top_constraints[vline_index]))
+        canvas.create_text(100 + (0.5 + vline_index) * 500 /
+                           LOG_WIDTH, 10, text=str(logimage.top_constraints[vline_index]))
 
     for hline_index in range(LOG_HEIGHT):
         canvas.create_line(0, 100 + (1 + hline_index) * 500 /
                            LOG_HEIGHT, 600, 100 + (1 + hline_index) * 500/LOG_HEIGHT)
-        canvas.create_text(0, 100 + (1 + hline_index) * 500 /
+        canvas.create_text(10, 100 + (0.5 + hline_index) * 500 /
                            LOG_HEIGHT, text=str(logimage.left_constraints[hline_index]))
     canvas.pack()
 
