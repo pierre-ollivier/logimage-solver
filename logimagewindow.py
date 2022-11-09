@@ -1,4 +1,4 @@
-from board import Board
+from utils import list_to_horizontal_str, list_to_vertical_str
 from logimage import Logimage
 import tkinter as tk
 
@@ -12,21 +12,22 @@ def create_window(logimage: Logimage):
 
     # TODO: add support for non-squared logimages and adjust the place taken by the constraints
 
-    canvas = tk.Canvas(win, width=601, height=601)
-    canvas.create_line(0, 100, 600, 100)
-    canvas.create_line(100, 0, 100, 600)
+    canvas = tk.Canvas(win, width=MAX_WIDTH + 1, height=MAX_HEIGHT + 1)
+    canvas.create_line(0, 100, MAX_WIDTH, 100)
+    canvas.create_line(100, 0, 100, MAX_HEIGHT)
+
+    # TODO: change constraints alignment from centered to left- and bottom-aligned (for instance)
+    # or even allow the user to change
 
     for vline_index in range(LOG_WIDTH):
         canvas.create_line(100 + (1 + vline_index) * 500/LOG_WIDTH,
                            0, 100 + (1 + vline_index) * 500/LOG_WIDTH, 600)
         canvas.create_text(100 + (0.5 + vline_index) * 500 /
-                           LOG_WIDTH, 10, text=str(logimage.top_constraints[vline_index]))
+                           LOG_WIDTH, 30, text=list_to_vertical_str(logimage.top_constraints[vline_index]))
 
     for hline_index in range(LOG_HEIGHT):
         canvas.create_line(0, 100 + (1 + hline_index) * 500 /
                            LOG_HEIGHT, 600, 100 + (1 + hline_index) * 500/LOG_HEIGHT)
-        canvas.create_text(10, 100 + (0.5 + hline_index) * 500 /
-                           LOG_HEIGHT, text=str(logimage.left_constraints[hline_index]))
+        canvas.create_text(30, 100 + (0.5 + hline_index) * 500 /
+                           LOG_HEIGHT, text=list_to_horizontal_str(logimage.left_constraints[hline_index]))
     canvas.pack()
-
-    #win.ma

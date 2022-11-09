@@ -55,17 +55,15 @@ def draw_board_in_canvas(canvas: tk.Canvas, board: Board) -> None:
         if data[i, j] == 1:
             canvas.create_rectangle(
                 i * 200/LINES_COUNT, j * 200/COLUMNS_COUNT, (i + 1) * 200/LINES_COUNT, (j + 1) * 200/COLUMNS_COUNT, fill="#000")
-            # i * 200/COLUMNS_COUNT, j * 200/LINES_COUNT, (i + 1) * 200/COLUMNS_COUNT, (j + 1) * 200/LINES_COUNT, fill="#000")
         else:
             canvas.create_rectangle(
                 i * 200/LINES_COUNT, j * 200/COLUMNS_COUNT, (i + 1) * 200/LINES_COUNT, (j + 1) * 200/COLUMNS_COUNT, fill="#fff")
-            # i * 200/COLUMNS_COUNT, j * 200/LINES_COUNT, (i + 1) * 200/COLUMNS_COUNT, (j + 1) * 200/LINES_COUNT, fill="#fff")
 
 
 def board_from_image(path: str):
     global slider, LINES_COUNT, COLUMNS_COUNT
     img = grayscale_img(path)
-    img = resize_img(img, (LINES_COUNT, COLUMNS_COUNT))  # TODO
+    img = resize_img(img, (LINES_COUNT, COLUMNS_COUNT))
     arr = np.array(img)
     board = to_board(arr, 255 - slider.get())
     return board

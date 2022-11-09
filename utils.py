@@ -106,3 +106,19 @@ def get_following_values(constraint_list: List[int], board_extract: NDArray, ind
         print("Current_constraint: ", current_constraint)
         print("Constraint_list: ", constraint_list)
         print("Satisfied_constraints", satisfied_constraints)
+
+def list_to_horizontal_str(list: List) -> str:
+    """
+    Converts a constraint list to a horizontal `str`.
+
+    Example : `[2, 5, 4, 8]` -> `"2 5 4 8"`
+    """
+    return " ".join(str(e) for e in list)
+
+def list_to_vertical_str(list: List) -> str:
+    """
+    Converts a constraint list to a vertical `str`.
+
+    Example : `[2, 5, 4, 8]` -> `"2\n5\n4\n8"`
+    """
+    return "\n".join(str(e) for e in list)
