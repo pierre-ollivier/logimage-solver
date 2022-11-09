@@ -28,6 +28,6 @@ def create_window(logimage: Logimage):
     for hline_index in range(LOG_HEIGHT):
         canvas.create_line(0, 100 + (1 + hline_index) * 500 /
                            LOG_HEIGHT, 600, 100 + (1 + hline_index) * 500/LOG_HEIGHT)
-        canvas.create_text(30, 100 + (0.5 + hline_index) * 500 /
-                           LOG_HEIGHT, text=list_to_horizontal_str(logimage.left_constraints[hline_index]))
+        canvas.create_text(15, 100 + (0.5 + hline_index) * 500 /
+                           LOG_HEIGHT, text=list_to_horizontal_str(logimage.left_constraints[hline_index]), anchor="w")
     canvas.pack()
