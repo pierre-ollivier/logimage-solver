@@ -107,13 +107,18 @@ def get_following_values(constraint_list: List[int], board_extract: NDArray, ind
         print("Constraint_list: ", constraint_list)
         print("Satisfied_constraints", satisfied_constraints)
 
+
 def list_to_horizontal_str(list: List) -> str:
     """
     Converts a constraint list to a horizontal `str`.
+    Returns "0" if the list of constraints is blank.
 
     Example : `[2, 5, 4, 8]` -> `"2 5 4 8"`
     """
-    return " ".join(str(e) for e in list)
+    if list == []:
+        return "0"
+    return "  ".join(str(e) for e in list)
+
 
 def list_to_vertical_str(list: List) -> str:
     """
@@ -121,4 +126,6 @@ def list_to_vertical_str(list: List) -> str:
 
     Example : `[2, 5, 4, 8]` -> `"2\n5\n4\n8"`
     """
+    if list == []:
+        return "0"
     return "\n".join(str(e) for e in list)
