@@ -12,7 +12,7 @@ def create_window(logimage: Logimage):
 
     # TODO: add support for non-squared logimages and adjust the place taken by the constraints
 
-    canvas = tk.Canvas(width=601, height=601)
+    canvas = tk.Canvas(win, width=601, height=601)
     canvas.create_line(0, 100, 600, 100)
     canvas.create_line(100, 0, 100, 600)
 
@@ -24,9 +24,9 @@ def create_window(logimage: Logimage):
 
     for hline_index in range(LOG_HEIGHT):
         canvas.create_line(0, 100 + (1 + hline_index) * 500 /
-                           LOG_HEIGHT, 600, 100 + (1 + hline_index) * 500/LOG_WIDTH)
+                           LOG_HEIGHT, 600, 100 + (1 + hline_index) * 500/LOG_HEIGHT)
         canvas.create_text(0, 100 + (1 + hline_index) * 500 /
                            LOG_HEIGHT, text=str(logimage.left_constraints[hline_index]))
     canvas.pack()
 
-    win.mainloop()
+    #win.ma
