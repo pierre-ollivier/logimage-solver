@@ -31,6 +31,13 @@ def validation_button_pressed():
     COLUMNS_COUNT = int(entry_vertical.get())
     board = board_from_image(imPath)
     draw_board_in_canvas(canvas_logimage, board)
+
+
+def logimage_visualization_button_pressed():
+    global imPath, canvas_logimage, LINES_COUNT, COLUMNS_COUNT
+    LINES_COUNT = int(entry_horizontal.get())
+    COLUMNS_COUNT = int(entry_vertical.get())
+    board = board_from_image(imPath)
     logimage = board_to_logimage(board)
     create_window(logimage)
 
@@ -98,6 +105,11 @@ validation_button.pack()
 
 canvas_logimage = tk.Canvas(width=202, height=202)
 canvas_logimage.pack()
+
+logimage_visualization_button = tk.Button(
+    text="Visualiser le logimage vide", command=logimage_visualization_button_pressed
+)
+logimage_visualization_button.pack()
 
 
 def draw_lines():
