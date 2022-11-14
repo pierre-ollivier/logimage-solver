@@ -8,6 +8,11 @@ import numpy as np
 
 
 class Logimage:
+    """
+    This class represents only a logimage in terms of its constraints (the numbers at the top and left of a printed grid).
+    This data is represented as two lists of lists of integers, `left_constraints` and `top_constraints`.
+    The `solve()` method allows to solve a Logimage. The result is returned as a `Board` object.
+    """
 
     def __init__(self, left_constraints: List[List[int]] = None, top_constraints: List[List[int]] = None):
         if left_constraints is None:
@@ -60,6 +65,15 @@ class Logimage:
                     return (False, None)
 
     def solve(self, research_function=Board.find_border_empty_square) -> Board:
+        """
+        Performs a recursive algorithm to solve a `Logimage`. The point is to fill surely as many squares as possible,
+        and then pick an unknown square and try to fill it. If it is possible to solve the corresponding `Logimage`, 
+        a solution to the original `Logimage` is found which means that the algorithm stops.
+        If no solution exists (the board and the constraints are contradictory), a `NoSolutionError` exception is raised
+        which means that the hypothesis went wrong. So we can deduce that the hypotheted square is white, and continue
+        this way.
+        """
+        
         empty_board = Board(height=self.height, width=self.width)
         is_f, sol = self.is_fillable(empty_board, research_function)
         if is_f:
