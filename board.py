@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Tuple
 import numpy as np
 from numpy.typing import NDArray
 from exceptions import *
@@ -6,6 +6,18 @@ import random as rd
 
 
 class Board:
+    """
+    This class handles the content of a logimage. A `Board` contains a matrix `data` that represents the state of
+    the content of a logimage: each square is represented as follows:
+    - `1` for a black square
+    - `0` for a white square that is known (not a square that is undetermined)
+    - `-1` for an undetermined square.
+    When a `Board` instance is initialized without providing the data, the data is initialized according to the dimensions
+    `height` and `width` and filled with -1s.
+
+    The class `Board` has a method `draw()` that draws the board inside the console. In this representation, 'X' depicts
+    a black square, ' ' depicts either a white square or an unknown square.
+    """
     def __init__(self, height: int = None, width: int = None, data: NDArray = None):
         if height is None or width is None:
             if data is None:
