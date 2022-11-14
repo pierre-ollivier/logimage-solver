@@ -124,7 +124,7 @@ def list_to_vertical_str(list: List) -> str:
     """
     Converts a constraint list to a vertical `str`.
 
-    Example : `[2, 5, 4, 8]` -> `"2\n5\n4\n8"`
+    Example : `[2, 5, 4, 8]` -> `"2\\n5\\n4\\n8"`
     """
     if list == []:
         return "0"
