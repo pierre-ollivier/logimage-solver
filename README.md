@@ -3,7 +3,8 @@
 Welcome to the logimage-solver project! This project follows one objective:
 Allow the user to enter an image and a preferred logimage size, and get as output a solvable logimage (a logimage that has exactly one solution, and neither zero nor multiple).
 
-Currently, the project is in development state, so the modules are not totally connected to each other. To run the project, you have two options :
+Currently, the project is in development state, so the modules are not totally connected to each other.
+Furthermore, the development of this project is stopped because it is being merged (and improved) with another project.
 
 - Run `mainwindow.py`, that will display a window. You can then upload an image, choose the number of rows and columns, choose the threshold for black and white conversion, and generate the logimage in a new window. There is no guarantee that the logimage has only one solution, however it has at least one. The graphical output is only adapted to squared logimages and squared input images, rectangular (non-squared) images and logimages won't raise any error but the output might look strange.
 - Run `main.py`, that will perform a speed benchmark on the logimage-solving algorithm.
